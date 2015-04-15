@@ -12,5 +12,6 @@ class Messages extends CI_Controller {
 	{
 		$post = $this->input->post();
 		$this->Message->create($post);
+		redirect('/users/show/' . $post['to_id']);
 	}
 }

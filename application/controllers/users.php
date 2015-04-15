@@ -58,6 +58,27 @@ class Users extends CI_Controller {
 		$data = array();
 		$data['user'] = $this->User->find_by_id($id);
 		$data['messages'] = $this->Message->find_all_by_id($id);
+		$current_id = 0;
+		$messages = array(1);
+		foreach($data['messages'] as $key => $message)
+		{
+			if($message['message_id'] != $current_id)
+			{
+				$current_id = $message['message_id'];
+				$messages[] = array(
+					"person_leaving_message" => $message['person_leaving_message'],
+					"content" => $message['content']
+					);
+			}
+			if(!isset($messages[$key]['comments']))
+			{
+				$messages[$message['message_id']]['comments'] = array();
+			}
+			$messages[$message['message_id']]['comments'][] = array(
+				"content" => $message['comment'],
+				"person_leaving_comment" => $message['person_leaving_comment']);
+		}
+		$data['messages'] = $messages;
 		$this->load->view("profile", $data);
 	}
 
